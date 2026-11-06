@@ -1,0 +1,12 @@
+# Mendez-Llanes, Castillo-Rosado, Mendez-Vazquez & Tistarelli, "On the Use of Local
+# Fixations and Quality Measures for Deep Face Recognition", IEEE TBIOM 4(2), 2022,
+# doi:10.1109/TBIOM.2022.3153391.
+source: doi:10.1109/TBIOM.2022.3153391
+
+# Paired accuracy noise allowed between global and quality-weighted matching (points).
+noise_pp: 0.5
+
+# Fill in from the paper's tables to enable test_published_values. Only the abstract
+# was available when this suite was written, so no values are recorded here.
+# Shape: {lfw: {global: 0.0, quality_weighted: 0.0}, ...} with accuracies in %.
+published_values: null
