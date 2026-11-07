@@ -15,17 +15,12 @@ def row(report: str, dataset: str) -> tuple[float, float]:
 
 @pytest.mark.parametrize("dataset", ["lfw", "calfw", "cplfw"])
 def test_quality_weighted_matching_does_not_lose_to_global(report, targets, dataset):
-    """Quality-driven local matching is the proposal, so it should not fall behind.
-
-    This is the method's stated purpose rather than a published table.
-    """
+    """Table II: Quality Map beats the original model on every network and dataset."""
     global_acc, weighted_acc = row(report, dataset)
     assert weighted_acc >= global_acc - targets["noise_pp"]
 
 
 def test_published_values(report, targets):
-    if targets["published_values"] is None:
-        pytest.skip("paper tables not recorded in tests/paper_targets.yaml")
     for dataset, expected in targets["published_values"].items():
         global_acc, weighted_acc = row(report, dataset)
         assert global_acc == pytest.approx(expected["global"], abs=1.0)
