@@ -7,7 +7,7 @@ from typing import Dict
 import torch
 import torch.nn.functional as F
 
-from locfix.models.fr_net import REGION_SLICES
+from locfix.models.fr_net import REGION_SLICES, region_rows
 
 
 def region_qualities(images: torch.Tensor) -> Dict[str, torch.Tensor]:
@@ -25,7 +25,7 @@ def region_qualities(images: torch.Tensor) -> Dict[str, torch.Tensor]:
     b, _, h, w = lap.shape
     out = {}
     for name, (y0, y1) in REGION_SLICES.items():
-        a, b_ = int(y0 * h), max(int(y1 * h), int(y0 * h) + 1)
+        a, b_ = region_rows(y0, y1, h)
         patch = lap[:, :, a:b_, :]
         var = patch.var(dim=(1, 2, 3)).clamp(min=0)
         # squash to (0,1)

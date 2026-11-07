@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import math
 from typing import Dict, List, Tuple
 
 import torch
@@ -15,6 +16,11 @@ REGION_SLICES = {
     "nose": (0.40, 0.70),
     "mouth": (0.65, 0.95),
 }
+
+
+def region_rows(y0: float, y1: float, h: int) -> Tuple[int, int]:
+    """Row range of an h-row map covering every row the band [y0, y1] overlaps."""
+    return math.floor(y0 * h), math.ceil(y1 * h)
 
 
 class FixationFaceNet(nn.Module):
@@ -50,7 +56,7 @@ class FixationFaceNet(nn.Module):
 
     def _region_pool(self, feat: torch.Tensor, y0: float, y1: float) -> torch.Tensor:
         _, _, h, _ = feat.shape
-        a, b = int(y0 * h), max(int(y1 * h), int(y0 * h) + 1)
+        a, b = region_rows(y0, y1, h)
         return torch.flatten(feat[:, :, a:b, :].mean(dim=(2, 3)), 1)
 
     def region_embeddings(self, x: torch.Tensor) -> Dict[str, torch.Tensor]:
